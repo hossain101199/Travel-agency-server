@@ -3,7 +3,7 @@ import config from '../../../config';
 import catchAsync from '../../../shared/catchAsync';
 import sendResponse from '../../../shared/sendResponse';
 import { IUser } from '../user/user.interface';
-import { ILoginUserResponse } from './auth.interface';
+import { ILoginUserResponse, IRefreshTokenResponse } from './auth.interface';
 import { authService } from './auth.service';
 
 const createUser: RequestHandler = catchAsync(async (req, res) => {
@@ -42,7 +42,35 @@ const loginUser: RequestHandler = catchAsync(async (req, res) => {
   });
 });
 
+const refreshToken: RequestHandler = catchAsync(async (req, res) => {
+  const { refreshToken } = req.cookies;
+
+  const result = await authService.refreshToken(refreshToken);
+
+  sendResponse<IRefreshTokenResponse>(res, {
+    statusCode: 200,
+    success: true,
+    message: 'Token has been refreshed',
+    data: result,
+  });
+});
+
+const changePassword: RequestHandler = catchAsync(async (req, res) => {
+  const user = req.verifiedUser;
+  const passwordData = req.body;
+
+  await authService.changePassword(user, passwordData);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: 'Password changed successfully !',
+  });
+});
+
 export const authController = {
   createUser,
   loginUser,
+  refreshToken,
+  changePassword,
 };
