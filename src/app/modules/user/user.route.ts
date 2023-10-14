@@ -7,17 +7,29 @@ import { userValidation } from './user.validation';
 
 const router = express.Router();
 
-router.get('/:id', auth(UserRole.ADMIN), userController.getSingleUser);
+router.get(
+  '/:id',
+  auth(UserRole.SUPER_ADMIN, UserRole.ADMIN),
+  userController.getSingleUser
+);
 
 router.patch(
   '/:id',
-  auth(UserRole.ADMIN),
+  auth(UserRole.SUPER_ADMIN, UserRole.ADMIN),
   validateRequest(userValidation.updateUserZodSchema),
   userController.updateUser
 );
 
-router.delete('/:id', auth(UserRole.ADMIN), userController.deleteUser);
+router.delete(
+  '/:id',
+  auth(UserRole.SUPER_ADMIN, UserRole.ADMIN),
+  userController.deleteUser
+);
 
-router.get('/', auth(UserRole.ADMIN), userController.getAllUsers);
+router.get(
+  '/',
+  auth(UserRole.SUPER_ADMIN, UserRole.ADMIN),
+  userController.getAllUsers
+);
 
 export const userRoutes = router;

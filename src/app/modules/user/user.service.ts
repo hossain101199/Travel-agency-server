@@ -30,7 +30,7 @@ const getSingleUserFromDB = async (payload: string): Promise<IUser | null> => {
 const updateUserInDB = async (
   id: string,
   payload: Partial<User>
-): Promise<IUser | null> => {
+): Promise<IUser> => {
   const result = await prisma.user.update({
     where: {
       id,
@@ -54,7 +54,7 @@ const updateUserInDB = async (
   return result;
 };
 
-const deleteUserFromDB = async (payload: string): Promise<IUser | null> => {
+const deleteUserFromDB = async (payload: string): Promise<IUser> => {
   const result = await prisma.user.delete({
     where: {
       id: payload,

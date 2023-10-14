@@ -64,7 +64,7 @@ const changePassword: RequestHandler = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: 200,
     success: true,
-    message: 'Password changed successfully !',
+    message: 'Password changed successfully',
   });
 });
 

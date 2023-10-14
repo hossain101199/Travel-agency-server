@@ -1,6 +1,5 @@
 import { RequestHandler } from 'express';
 import { paginationFields } from '../../../constants/pagination';
-import ApiError from '../../../errors/ApiError';
 import catchAsync from '../../../shared/catchAsync';
 import pick from '../../../shared/pick';
 import sendResponse from '../../../shared/sendResponse';
@@ -36,19 +35,12 @@ const updateUser: RequestHandler = catchAsync(async (req, res) => {
 
   const result = await userService.updateUserInDB(id, updatedUserData);
 
-  if (result === null) {
-    throw new ApiError(
-      404,
-      `Error: User with ID ${id} is not found. Please verify the provided ID and try again`
-    );
-  } else {
-    sendResponse<IUser>(res, {
-      statusCode: 200,
-      success: true,
-      message: 'User updated successfully',
-      data: result,
-    });
-  }
+  sendResponse<IUser>(res, {
+    statusCode: 200,
+    success: true,
+    message: 'User updated successfully',
+    data: result,
+  });
 });
 
 const deleteUser: RequestHandler = catchAsync(async (req, res) => {
@@ -56,19 +48,12 @@ const deleteUser: RequestHandler = catchAsync(async (req, res) => {
 
   const result = await userService.deleteUserFromDB(id);
 
-  if (result === null) {
-    throw new ApiError(
-      404,
-      `Error: User with ID ${id} is not found. Please verify the provided ID and try again`
-    );
-  } else {
-    sendResponse<IUser>(res, {
-      statusCode: 200,
-      success: true,
-      message: 'User deleted successfully',
-      data: result,
-    });
-  }
+  sendResponse<IUser>(res, {
+    statusCode: 200,
+    success: true,
+    message: 'User deleted successfully',
+    data: result,
+  });
 });
 
 const getAllUsers: RequestHandler = catchAsync(async (req, res) => {
