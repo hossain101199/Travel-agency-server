@@ -15,7 +15,7 @@ router.get(
 
 router.patch(
   '/',
-  auth(UserRole.SUPER_ADMIN, UserRole.ADMIN),
+  auth(UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.CUSTOMER),
   validateRequest(userValidation.updateUserZodSchema),
   profileController.updateProfile
 );

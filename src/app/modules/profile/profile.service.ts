@@ -38,8 +38,6 @@ const updateProfileInDB = async (
       return obj;
     }, {} as Partial<User>);
 
-  console.log(filteredPayload);
-
   const result = await prisma.user.update({
     where: {
       id: user?.id,
