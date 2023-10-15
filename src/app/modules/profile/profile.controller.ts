@@ -31,6 +31,25 @@ const getProfile: RequestHandler = catchAsync(async (req, res) => {
   }
 });
 
+const updateProfile: RequestHandler = catchAsync(async (req, res) => {
+  if (!req.verifiedUser) {
+    throw new ApiError(403, 'Forbidden');
+  }
+
+  const user = req.verifiedUser;
+  const updatedUserData = req.body;
+
+  const result = await profileService.updateProfileInDB(user, updatedUserData);
+
+  sendResponse<IUser>(res, {
+    statusCode: 200,
+    success: true,
+    message: 'User updated successfully',
+    data: result,
+  });
+});
+
 export const profileController = {
   getProfile,
+  updateProfile,
 };
