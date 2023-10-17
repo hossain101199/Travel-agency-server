@@ -21,6 +21,7 @@ model User {
   updatedAt DateTime @updatedAt
 
   bookings Booking[]
+  reviews  Review[]
 
   @@map("users")
 }
@@ -58,6 +59,7 @@ model Service {
   updatedAt DateTime @updatedAt
 
   bookings Booking[]
+  reviews  Review[]
 
   @@map("Services")
 }
@@ -108,4 +110,18 @@ enum PaymentStatus {
   PENDING
   PAID
   FAILED
+}
+
+model Review {
+  id      Int    @id @default(autoincrement())
+  rating  Int
+  comment String
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  serviceId String
+  service   Service @relation(fields: [serviceId], references: [id])
+
+  @@map("reviews")
 }

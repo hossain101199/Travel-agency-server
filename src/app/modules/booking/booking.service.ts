@@ -127,6 +127,72 @@ const getSingleBookingFromDB = async (
   return result;
 };
 
+const updateBookingInDB = async (
+  id: string,
+  user: JwtPayload,
+  payload: Partial<Booking>
+): Promise<Booking> => {
+  const allowedFields = ['status', 'travelDate'];
+
+  // Filter the payload to only include allowed fields
+  const filteredPayload: Partial<Booking> = Object.keys(payload)
+    .filter(key => allowedFields.includes(key as keyof Booking))
+    .reduce((obj, key) => {
+      (obj as any)[key] = (payload as any)[key];
+      return obj;
+    }, {} as Partial<Booking>);
+
+  let result;
+
+  if (user.role === UserRole.CUSTOMER) {
+    result = await prisma.booking.update({
+      where: { id: id, userId: user.id },
+      data: filteredPayload,
+      include: {
+        user: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            role: true,
+            contactNo: true,
+            address: true,
+            profileImg: true,
+            createdAt: true,
+            updatedAt: true,
+          },
+        },
+        service: { include: { category: true } },
+        payments: true,
+      },
+    });
+  } else {
+    result = await prisma.booking.update({
+      where: { id: id },
+      data: filteredPayload,
+      include: {
+        user: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            role: true,
+            contactNo: true,
+            address: true,
+            profileImg: true,
+            createdAt: true,
+            updatedAt: true,
+          },
+        },
+        service: { include: { category: true } },
+        payments: true,
+      },
+    });
+  }
+
+  return result;
+};
+
 const getAllBookingsFromDB = async (
   filters: IBookingFilters,
   paginationOptions: IPaginationOptions,
@@ -218,5 +284,6 @@ const getAllBookingsFromDB = async (
 export const bookingService = {
   createBookingInDB,
   getSingleBookingFromDB,
+  updateBookingInDB,
   getAllBookingsFromDB,
 };

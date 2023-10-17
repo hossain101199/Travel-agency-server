@@ -1,3 +1,8 @@
-export const bookingFilterableFields = ['searchTerm', 'userId', 'status'];
+export const bookingFilterableFields = [
+  'searchTerm',
+  'status',
+  'userId',
+  'serviceId',
+];
 
-export const bookingSearchableFields = ['userId', 'status'];
+export const bookingSearchableFields = ['userId', 'serviceId'];

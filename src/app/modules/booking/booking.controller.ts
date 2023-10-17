@@ -54,6 +54,26 @@ const getSingleBooking: RequestHandler = catchAsync(async (req, res) => {
   }
 });
 
+const updateBooking: RequestHandler = catchAsync(async (req, res) => {
+  const id = req.params.id;
+
+  if (!req.verifiedUser) {
+    throw new ApiError(403, 'Forbidden');
+  }
+
+  const user = req.verifiedUser;
+  const updatedData = req.body;
+
+  const result = await bookingService.updateBookingInDB(id, user, updatedData);
+
+  sendResponse<Booking>(res, {
+    statusCode: 200,
+    success: true,
+    message: 'Booking updated successfully',
+    data: result,
+  });
+});
+
 const getAllBookings: RequestHandler = catchAsync(async (req, res) => {
   if (!req.verifiedUser) {
     throw new ApiError(403, 'Forbidden');
@@ -82,5 +102,6 @@ const getAllBookings: RequestHandler = catchAsync(async (req, res) => {
 export const bookingController = {
   createBooking,
   getSingleBooking,
+  updateBooking,
   getAllBookings,
 };

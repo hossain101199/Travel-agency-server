@@ -20,6 +20,13 @@ router.get(
   bookingController.getSingleBooking
 );
 
+router.patch(
+  '/:id',
+  validateRequest(bookingValidation.updateBookingZodSchema),
+  auth(UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.CUSTOMER),
+  bookingController.updateBooking
+);
+
 router.get(
   '/',
   auth(UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.CUSTOMER),

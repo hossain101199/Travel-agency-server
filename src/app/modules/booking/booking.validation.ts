@@ -1,3 +1,4 @@
+import { BookingStatus } from '@prisma/client';
 import { z } from 'zod';
 
 const createBookingZodSchema = z.object({
@@ -15,6 +16,26 @@ const createBookingZodSchema = z.object({
   }),
 });
 
+const updateBookingZodSchema = z.object({
+  body: z.object({
+    travelDate: z
+      .string()
+      .transform(str => new Date(str))
+      .refine(date => date > new Date(), {
+        message: 'Travel date is less than today',
+      })
+      .optional(),
+    status: z
+      .enum([
+        BookingStatus.CANCELED,
+        BookingStatus.CONFIRMED,
+        BookingStatus.PENDING,
+      ])
+      .optional(),
+  }),
+});
+
 export const bookingValidation = {
   createBookingZodSchema,
+  updateBookingZodSchema,
 };
