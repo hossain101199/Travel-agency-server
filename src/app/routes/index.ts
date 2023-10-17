@@ -1,5 +1,6 @@
 import express from 'express';
 import { authRoutes } from '../modules/auth/auth.route';
+import { bookingRoutes } from '../modules/booking/booking.route';
 import { categoryRoutes } from '../modules/category/category.route';
 import { profileRoutes } from '../modules/profile/profile.route';
 import { serviceRoutes } from '../modules/service/service.route';
@@ -28,10 +29,10 @@ const moduleRoutes = [
     path: '/service',
     route: serviceRoutes,
   },
-  // {
-  //   path: '/orders',
-  //   route: orderRoutes,
-  // },
+  {
+    path: '/bookings',
+    route: bookingRoutes,
+  },
 ];
 
 moduleRoutes.forEach(route => routes.use(route.path, route.route));

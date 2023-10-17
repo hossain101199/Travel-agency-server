@@ -20,6 +20,8 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  bookings Booking[]
+
   @@map("users")
 }
 
@@ -55,5 +57,55 @@ model Service {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  bookings Booking[]
+
   @@map("Services")
+}
+
+model Booking {
+  id             String        @id @default(uuid())
+  travelDate     DateTime
+  numberOfPeople Int
+  totalAmount    Float
+  status         BookingStatus @default(PENDING)
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  serviceId String
+  service   Service @relation(fields: [serviceId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  payments Payment[]
+
+  @@map("bookings")
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELED
+}
+
+model Payment {
+  id            String        @id @default(uuid())
+  paymentMethod String
+  amount        Float
+  paymentStatus PaymentStatus @default(PENDING)
+
+  bookingId String
+  booking   Booking @relation(fields: [bookingId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("payments")
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
 }
