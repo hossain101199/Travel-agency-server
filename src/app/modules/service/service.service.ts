@@ -23,7 +23,26 @@ const getSingleServiceFromDB = async (
       id: payload,
     },
 
-    include: { category: true },
+    include: {
+      category: true,
+      reviews: {
+        include: {
+          user: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              role: true,
+              contactNo: true,
+              address: true,
+              profileImg: true,
+              createdAt: true,
+              updatedAt: true,
+            },
+          },
+        },
+      },
+    },
   });
 
   return result;
